@@ -1,0 +1,54 @@
+
+<RelativeLayout xmlns:p1="http://schemas.android.com/apk/res/android"
+    p1:layout_width="match_parent"
+    p1:layout_height="match_parent"
+    p1:id="@+id/relativeLayout1"
+    p1:minWidth="25px"
+    p1:minHeight="25px">
+    <TextView
+        p1:text="Benutzername:"
+        p1:textAppearance="?android:attr/textAppearanceSmall"
+        p1:layout_width="wrap_content"
+        p1:layout_height="wrap_content"
+        p1:id="@+id/textView1"
+        p1:layout_marginLeft="7.5dp"
+        p1:layout_marginTop="11.5dp"
+        p1:layout_marginRight="13.0dp" />
+    <TextView
+        p1:text="Passwort:"
+        p1:textAppearance="?android:attr/textAppearanceSmall"
+        p1:layout_width="wrap_content"
+        p1:layout_height="wrap_content"
+        p1:id="@+id/textView2"
+        p1:layout_marginLeft="7.5dp"
+        p1:layout_marginTop="62.0dp"
+        p1:layout_marginRight="11.0dp" />
+    <EditText
+        p1:inputType="textPassword"
+        p1:layout_width="match_parent"
+        p1:layout_height="wrap_content"
+        p1:layout_toRightOf="@id/textView2"
+        p1:id="@+id/pwText"
+        p1:layout_marginTop="47.5dp" />
+    <EditText
+        p1:layout_width="match_parent"
+        p1:layout_height="wrap_content"
+        p1:layout_toRightOf="@id/textView1"
+        p1:id="@+id/userText"
+        p1:layout_marginLeft="11.5dp" />
+    <Button
+        p1:text="Login"
+        p1:layout_width="wrap_content"
+        p1:layout_height="wrap_content"
+        p1:layout_below="@id/pwText"
+        p1:id="@+id/LoginBtn"
+        p1:layout_toRightOf="@id/LoginBtn" />
+    <TextView
+        p1:text="Nutzername und Passwort wird lokal gespeichert."
+        p1:textAppearance="?android:attr/textAppearanceSmall"
+        p1:layout_width="wrap_content"
+        p1:layout_height="wrap_content"
+        p1:layout_toRightOf="@id/LoginBtn"
+        p1:id="@+id/debug"
+        p1:layout_marginTop="111.0dp" />
+</RelativeLayout>
