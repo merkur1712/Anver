@@ -146,7 +146,7 @@ namespace Anver
             WebResponse response = request.GetResponse();
             Stream data = response.GetResponseStream();
             string html = String.Empty;
-            using (StreamReader sr = new StreamReader(data))
+            using (StreamReader sr = new StreamReader(data, Encoding.GetEncoding("iso-8859-1")))
             {
                 html = sr.ReadToEnd();
             }
