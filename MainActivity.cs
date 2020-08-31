@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
+using Java.Sql;
 
 namespace Anver
 {
@@ -38,7 +39,7 @@ namespace Anver
             SetContentView(Resource.Layout.Login);
 
             FindViewById<Button>(Anver.Resource.Id.LoginBtn).Click += onLoginClick;
-           
+
         }
 
         void onLoginClick(object sender, EventArgs e)
@@ -50,7 +51,7 @@ namespace Anver
             string auth = System.Convert.ToBase64String(bytes);
 
             try
-            {            
+            {
                 WebRequest request = WebRequest.Create("http://www.vertretung.andreanum.de/");
                 request.Headers["Authorization"] = "Basic " + auth;
                 WebResponse response = request.GetResponse();
@@ -60,7 +61,8 @@ namespace Anver
                 {
                     html = sr.ReadToEnd();
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 FindViewById<TextView>(Resource.Id.debug).Text = ex.Message;
                 return;
@@ -72,7 +74,7 @@ namespace Anver
 
             InitMain();
         }
-        
+
         void InitMain()
         {
             SetContentView(Resource.Layout.Main);
@@ -85,10 +87,32 @@ namespace Anver
             {
                 classTV.SetText(AppSettings.GetValueOrDefault("defaultClass", ""), TextView.BufferType.Normal);
             }
-            if (DateTime.Now.Hour > 16)
-                dateTV.SetText(cal.GetDayOfMonth(DateTime.Now.AddDays(1)) + "." + cal.GetMonth(DateTime.Now.AddDays(1)) + ".", TextView.BufferType.Normal);
+
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday || (DateTime.Now.DayOfWeek == DayOfWeek.Friday && DateTime.Now.Hour > 16))
+            {
+                DateTime dt = DateTime.Now;
+
+                switch (DateTime.Now.DayOfWeek)
+                {
+                    case DayOfWeek.Friday:
+                        dt.AddDays(3);
+                        break;
+                    case DayOfWeek.Saturday:
+                        dt.AddDays(2);
+                        break;
+                    case DayOfWeek.Sunday:
+                        dt.AddDays(1);
+                        break;
+                }
+                setDate(dt);
+            }
             else
-                dateTV.SetText(cal.GetDayOfMonth(date1) + "." + cal.GetMonth(date1) + ".", TextView.BufferType.Normal);
+            {
+                if (DateTime.Now.Hour > 16)
+                    setDate(DateTime.Now.AddDays(1));
+                else
+                    setDate(date1);
+            }
         }
 
 
@@ -138,7 +162,7 @@ namespace Anver
             //Get week of year of entered date
             DateTime parsedDate = DateTime.Parse(dateTV.Text + cal.GetYear(DateTime.Now));
             DateTime t = new DateTime(cal.GetYear(DateTime.Now), 1, 1);
-            int week = cal.GetWeekOfYear(parsedDate, CalendarWeekRule.FirstDay, cal.GetDayOfWeek(t));
+            int week = cal.GetWeekOfYear(parsedDate, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
             //If week < 10 it must be 05 instead of 5
             string weekStr = (week < 10) ? "0" + week : week + "";
             FindViewById<TextView>(Resource.Id.textView1).SetText("http://www.vertretung.andreanum.de/" + weekStr + "/w/w00000.htm", TextView.BufferType.Normal);
@@ -153,6 +177,11 @@ namespace Anver
                 html = sr.ReadToEnd();
             }
             return html;
+        }
+
+        void setDate(DateTime dt)
+        {
+            dateTV.SetText(cal.GetDayOfMonth(dt) + "." + cal.GetMonth(dt) + ".", TextView.BufferType.Normal);
         }
     }
 }
